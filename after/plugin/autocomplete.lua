@@ -1,3 +1,4 @@
+local lspconfig = require('lspconfig')
 
 -- Setup nvim-cmp
 local cmp = require'cmp'
@@ -16,6 +17,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
+
   }, {
     { name = 'buffer' },
     { name = 'path' }

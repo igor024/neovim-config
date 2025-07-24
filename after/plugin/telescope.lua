@@ -3,5 +3,5 @@ vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = 'Telescope find f
 vim.keymap.set('n', '<C-p>', builtin.git_files, { desc = 'Telescope find tracked files' })
 
 vim.keymap.set('n', '<leader>ps', function()
-	builtin.grep_string({search = vim.fn.input("Grep > ")})
+	builtin.grep_string({search = vim.fn.input("Grep > "), cwd = vim.fn.getcwd(-1)})
 end)
