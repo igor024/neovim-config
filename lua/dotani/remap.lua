@@ -15,4 +15,4 @@ vim.keymap.set('v', '<A-k>', ":move '<-2<CR>gv=gv", { noremap = true, silent = t
 -- Move selected lines down (Alt-j in Visual mode)
 vim.keymap.set('v', '<A-j>', ":move '>+1<CR>gv=gv", { noremap = true, silent = true })
 
-vim.keymap.set('n', '<leader>f', 'vgg=G', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>f', 'mzgg=G`z', { noremap = true, silent = true })
