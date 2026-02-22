@@ -16,3 +16,9 @@ vim.keymap.set('v', '<A-k>', ":move '<-2<CR>gv=gv", { noremap = true, silent = t
 vim.keymap.set('v', '<A-j>', ":move '>+1<CR>gv=gv", { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>f', 'mzgg=G`z', { noremap = true, silent = true })
+
+-- paste from clipboard
+vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
+
+-- copy to clipboard
+vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, silent = true })

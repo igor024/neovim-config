@@ -9,14 +9,14 @@ return require('packer').startup(function(use)
 	use 'wbthomason/packer.nvim'
 
 
-
 	use {
-		'nvim-telescope/telescope.nvim', tag = '0.1.8',
-		-- or                            , branch = '0.1.x',
-		requires = { {'nvim-lua/plenary.nvim', 'debugloop/telescope-undo.nvim'} }
-	}
-
-	-- Or with configuration
+		'nvim-telescope/telescope.nvim',
+		branch = 'master', -- Switched from tag/0.1.x to master
+		requires = { 
+			{'nvim-lua/plenary.nvim'}, 
+			{'debugloop/telescope-undo.nvim'} 
+		}
+	}	-- Or with configuration
 	use({
 		'projekt0n/github-nvim-theme',
 		config = function()
@@ -63,7 +63,7 @@ return require('packer').startup(function(use)
 	use 'hrsh7th/cmp-cmdline'       -- Cmdline completions
 	use 'L3MON4D3/LuaSnip'          -- Snippet engine (optional but recommended)
 	use 'saadparwaiz1/cmp_luasnip'  -- Snippet completions (optional)
-	
+
 	use {
 		"folke/trouble.nvim",
 		requires = "nvim-tree/nvim-web-devicons",
