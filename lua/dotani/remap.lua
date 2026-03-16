@@ -22,3 +22,12 @@ vim.keymap.set('v', '<leader>y', '"+y', { noremap = true, silent = true })
 
 -- copy to clipboard
 vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, silent = true })
+
+-- Set the visual width of a physical tab character
+vim.opt.tabstop = 2 
+
+-- Set the number of spaces inserted for each indentation level
+vim.opt.shiftwidth = 2 
+
+-- Convert tabs to spaces (set to false if you want physical tab characters)
+vim.opt.expandtab = true
