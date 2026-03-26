@@ -31,3 +31,10 @@ vim.opt.shiftwidth = 4
 
 -- Convert tabs to spaces (set to false if you want physical tab characters)
 vim.opt.expandtab = true
+
+-- Make 'd' and 'D' delete instead of cut (in normal and visual modes)
+vim.keymap.set({'n', 'v'}, 'd', '"_d', { noremap = true })
+vim.keymap.set({'n', 'v'}, 'D', '"_D', { noremap = true })
+
+-- Make 'p' paste over a visual selection without replacing your clipboard
+vim.keymap.set('x', 'p', '"_dP', { noremap = true })
