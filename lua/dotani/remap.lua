@@ -27,7 +27,7 @@ vim.keymap.set('v', '<leader>p', '"+p', { noremap = true, silent = true })
 vim.opt.tabstop = 2 
 
 -- Set the number of spaces inserted for each indentation level
-vim.opt.shiftwidth = 2 
+vim.opt.shiftwidth = 4 
 
 -- Convert tabs to spaces (set to false if you want physical tab characters)
 vim.opt.expandtab = true
