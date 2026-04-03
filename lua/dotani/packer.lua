@@ -3,11 +3,9 @@
 -- Only required if you have packer configured as `opt`
 vim.cmd [[packadd packer.nvim]]
 
-
 return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
-
 
   use {
     'nvim-telescope/telescope.nvim',
@@ -16,7 +14,9 @@ return require('packer').startup(function(use)
       {'nvim-lua/plenary.nvim'}, 
       {'debugloop/telescope-undo.nvim'} 
     }
-  }	-- Or with configuration
+  }    
+  
+  -- Or with configuration
   use({
     'projekt0n/github-nvim-theme',
     config = function()
@@ -28,23 +28,56 @@ return require('packer').startup(function(use)
     end
   })
 
-  --treesitter
+  -- Treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
       local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
       ts_update()
     end,
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = { "c", "cpp", "javascript", "typescript", "lua", "vim", "vimdoc" },
+        sync_install = false,
+        auto_install = true,
+        highlight = { enable = true },
+      })
+    end
   }
 
   use('ThePrimeagen/harpoon')
   use('tpope/vim-fugitive')
-  use('neovim/nvim-lspconfig')
+  
+  -- LSPConfig + Mason (Fixed for Neovim 0.11+)
+  use {
+    "neovim/nvim-lspconfig",
+    requires = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+    },
+    config = function()
+      require("mason").setup()
+      require("mason-lspconfig").setup({
+        ensure_installed = { "clangd" }, 
+      })
+
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      -- Neovim 0.11+ Native LSP Setup (replaces lspconfig.clangd.setup)
+      vim.lsp.config("clangd", { 
+        capabilities = capabilities 
+      })
+      vim.lsp.enable("clangd")
+    end
+  }
+
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'nvim-tree/nvim-web-devicons', opt = true }
   }
+  
   use('VidocqH/lsp-lens.nvim')
+  
   use({
     "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
     config = function()
@@ -52,17 +85,52 @@ return require('packer').startup(function(use)
     end,
   })
 
-
-
-
   -- Autocompletion plugins
-  use 'hrsh7th/nvim-cmp'          -- Completion engine
-  use 'hrsh7th/cmp-nvim-lsp'      -- LSP source for nvim-cmp
-  use 'hrsh7th/cmp-buffer'        -- Buffer completions
-  use 'hrsh7th/cmp-path'          -- Path completions
-  use 'hrsh7th/cmp-cmdline'       -- Cmdline completions
-  use 'L3MON4D3/LuaSnip'          -- Snippet engine (optional but recommended)
-  use 'saadparwaiz1/cmp_luasnip'  -- Snippet completions (optional)
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+    },
+    config = function()
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+        }, {
+          { name = 'buffer' },
+          { name = 'path' },
+        })
+      })
+    end
+  }
 
   use {
     "folke/trouble.nvim",
@@ -76,7 +144,10 @@ return require('packer').startup(function(use)
     "pmizio/typescript-tools.nvim",
     requires = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
     config = function()
-      require("typescript-tools").setup {}
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      require("typescript-tools").setup {
+        capabilities = capabilities
+      }
     end,
   }
 end)
